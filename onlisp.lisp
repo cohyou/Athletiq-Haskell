@@ -10,7 +10,7 @@
         nil
         (let ((conts (second node))
               (yes (third node))
-              (no (fourth node)))
+              (no (fourth noeK
           (if yes
               (let ((yes-fn (compile-net yes))
                     (no-fn (compile-net no)))
