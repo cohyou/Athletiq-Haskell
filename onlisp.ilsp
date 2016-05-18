@@ -1,0 +1,69 @@
+(defvar *nodes* nil)
+
+(defun defnode (&rest args)
+  (push args *nodes*)
+  args)
+
+(defun compile-net (root)
+  (let ((node (assoc root *nodes*)))
+    (if (null node)
+        nil
+        (let ((conts (second node))
+              (yes (third node))
+              (no (fourth node)))
+          (if yes
+              (let ((yes-fn (compile-net yes))
+                    (no-fn (compile-net no)))
+                #'(lambda ()
+                    (format t "~A~%>> " conts)
+                    (funcall (if (eq (read) 'yes)
+                                 yes-fn
+                                 no-fn))))
+              #'(lambda () conts))))))
+
+(ql:quickload :alexandria)
+(use-package :alexandria)
+
+(defun make-matrix (rows cols)
+  (make-array (list rows cols) :element-type 'single-float))
+
+(deftype matrix (&optional a b)
+  `(simple-array single-float (,a ,b)))
+
+(defmacro benchmark ((times &optional (times2 times)) &body body)
+  (once-only (times times2)
+    (with-gensyms (i start end)
+      `(progn
+         (dotimes (,i ,times)
+           ,@body)
+         (let ((,start (get-internal-run-time)))
+           (time
+            (dotimes (,i ,times2)
+              ,@body))
+           (let ((,end (get-internal-run-time)))
+             (print (float (/ (- ,end ,start)
+                              internal-time-units-per-second)))))))))
+
+(defun revc (x k)
+  (if (null x)
+    (funcall k nil)
+    (revc (cdr x)
+      #'(lambda (w)
+        (funcall k (append w (list (car x))))))))
+
+;scheme
+(define (path node1 node2)
+  (bf-path node2 (list (list node1))))
+
+(define (bf-path dest queue)
+(if (null? queue)
+    '@
+    (let* ((path (car queue))
+           (node (car path)))
+      (if (eq? node dest)
+          (cdr (reverse path))
+          (bf-path dest
+                   (append (cdr queue)
+                           (map (lambda (n)
+                                  (cons n path))
+                                (neighbors node))))))))

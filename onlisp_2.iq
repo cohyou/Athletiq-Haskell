@@ -1,0 +1,42 @@
+.ql:quickload[:alexandria]
+@use-package(:alexandria);
+
+@func(make-matrix) $(rows cols)
+\vector(:single-float)[,[rows cols]]
+
+@type(matrix) $?(a b)
+\vector(:single-float)[,[a b]]
+
+@macro(benchmark)
+$(times) $?(#{times2 times}) $~(body)
+[@once-only(times times2)
+ @with-gensyms(i start end)
+   (! #(-1)
+        .dotimes [,[i times] ~(,body;)]
+        %(\{,start .get-internal-run-time;})
+          .time .dotimes [,[i times2] ~(,body)]
+          %(\{,end .get-internal-run-time;})
+            @print .float`[`[,end - ,start] / internal-time-units-per-second] !)]
+
+@func(revc)
+$(x) $(k) "継続"
+[?(.null[x]) |
+  .k[nil]
+  .revc | @rest[x] \(w)[.k | .append | w ,@0[x]]]
+
+@func(path) $(node1 node2)
+[.bf-path[node2 ,,node1]]
+
+@func(bf-path) $dest(queue)
+[?(.null[queue]) |
+   :@
+   %+(#{path #(0)[queue]}
+       {node #(0)[path]}) |
+     ?(.eq?[node dest]) |
+       @rest[.reverse[path]];
+       .bf-path |
+         dest .append |
+           #rest[queue] @map(\[.cons | _ path]) | .neighbors[node]]
+
+@@(progn) $(_)
+[![_] #(-1)[_]]

@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>onclick test</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script>
+      leftpx=0;
+      function touch(){
+        leftpx += 10;
+        //alert(leftpx+'px '+document.getElementById('migi').style.left);
+        document.getElementById('migi').style.left = leftpx+'px';
+      }
+      function reset(){
+        leftpx = 0;
+        document.getElementById('migi').style.left = leftpx+'px';
+      }
+    </script>
+    <style>
+      .yaji{font-size:20px; }
+      .btn{font-size:20px; width:200px; height:50px; text-align:center; margin-top:20px;}
+    </style>
+  </head>
+<body bgcolor="#FFFFFF" text="#000000">
+
+  <div id="migi" class="yaji" style="position:absolute; left:0px;">
+   ■
+  </div>
+  <div style="clear:both;"></div>
+
+  <div style="position:absolute; top:50px;">
+    <button class="btn" onclick="touch()">onclick</button>
+    <button class="btn" ontouchstart="touch()">ontouchstart</button>
+    <button class="btn" ontouchstart="reset()">reset</button>
+  </div>
+
+</body>
+</html>

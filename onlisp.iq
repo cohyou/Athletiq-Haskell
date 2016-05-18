@@ -1,0 +1,21 @@
+@var(*nodes*)[nil]
+
+@func(defnode) $~(args)
+[.push[args *nodes*]
+ args]
+
+@func(compile-net) $(root)
+[%(\{node .assoc[root *nodes*]})
+    ?(.null[node]) |
+      nil
+      %(\{conts #(1)[node]}
+         {yes   #(2)[node]}
+         {no    #(3)[node]}) |
+        ?(yes) |
+          %(\{yes-fn .compile-net[yes]}
+             {no-fn  .compile-net[no]}) |
+            \[.format[t "~A~%>> " conts]
+              @apply | ?(`[.read; = :yes]) | yes-fn no-fn]
+          \[conts]]
+
+@(div#id.b.c);
