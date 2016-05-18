@@ -20,8 +20,8 @@ parseTest p s = do
         putStr $ show e
 
 anyChar :: State String Char
-anyChar = state $ anyChar where
-    anyChar (x:xs) = (x, xs)
+anyChar = state $ anyChar
+    where anyChar (x:xs) = (x, xs)
 
 satisfy :: (Char -> Bool) -> State String Char
 satisfy f = state $ satisfy
