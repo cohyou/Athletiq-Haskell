@@ -4,6 +4,9 @@ import Data.Char
 
 import Control.Monad.State
 
+import Control.Monad -- sequenceのため
+import Control.Applicative ((<$>), (<*>))
+
 {-
 parseTest p s = do
     print $ fst $ p s
@@ -36,11 +39,14 @@ test3 xs0 =
         (x3, xs3) = digit  xs2
     in ([x1, x2, x3], xs3)
 -}
+{-
 test3 = do
     x1 <- letter
     x2 <- digit
     x3 <- digit
     return [x1, x2, x3]
+-}
+test3 = sequence [letter, digit, digit]
 
 {-
 test4 xs0 =
@@ -49,11 +55,14 @@ test4 xs0 =
         (x3, xs3) = (char ' ') xs2
     in ([x1, x2, x3], xs3)
 -}
+{-
 test4 = do
     x1 <- (char '[')
     x2 <- digit
     x3 <- (char ' ')
     return [x1, x2, x3]
+-}
+test4 = sequence [(char '['), digit, (char ' ')]
 
 main = do
     handle <- openFile "parse.iq" ReadMode
