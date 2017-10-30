@@ -3,6 +3,8 @@ import Text.ParserCombinators.Parsec
 
 data Briq = Int8 Integer | Text String | Smbl String | List [Briq]
 
+data Cell = Cell String Briq Briq
+
 data Annt = Annt String
 
 newtype AnntList = AnntList { getList :: [Annt] }
@@ -141,5 +143,5 @@ aexp = do
 main :: IO ()
 main = do
     handle <- openFile "parse.iq" ReadMode
-    text <- hGetContents handle    
+    text <- hGetContents handle
     print $ parse aexp "" text
